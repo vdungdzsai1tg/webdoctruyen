@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kho truyện Mã A Lềnh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: "Noto Serif", serif;
+        background-color: #fffbeb;
+      }
+      .story-card {
+        transition: all 0.3s ease;
+        transform: translateY(0);
+      }
+      .story-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+      .story-card:hover .play-overlay {
+        opacity: 1;
+      }
+      .play-overlay {
+        transition: opacity 0.3s ease;
+      }
+      .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .progress-bar {
+        height: 6px;
+        background-color: #ede9e3;
+        border-radius: 3px;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #d4a373 0%, #a18072 100%);
+        border-radius: 3px;
+        transition: width 0.1s linear;
+      }
+      .story-tag {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .tag-children {
+        background-color: rgba(74, 222, 128, 0.9);
+      }
+      .tag-journal {
+        background-color: rgba(59, 130, 246, 0.9);
+      }
+      .video-container {
+        position: relative;
+        width: 100%;
+        height: 0;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      }
+      .video-player {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+      }
+      .video-controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .video-container:hover .video-controls {
+        opacity: 1;
+      }
+      .category-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #fff;
+        min-width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+        border-radius: 0.5rem;
+        overflow: hidden;
+      }
+      .category-dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .dropdown-content a {
+        color: #713f12;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        transition: background 0.3s;
+      }
+      .dropdown-content a:hover {
+        background-color: #f8f1e1;
+      }
+    </style>
+  </head>
+  <body class="bg-amber-50">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+      <!-- Header -->
+      <header class="flex justify-between items-center mb-8">
+        <div class="flex items-center">
+          <div class="bg-amber-700 text-white p-3 rounded-lg mr-4">
+            <i class="fas fa-book-open text-2xl"></i>
+          </div>
+          <h1 class="text-4xl font-bold text-amber-900">
+            Kho truyện Mã A Lềnh
+          </h1>
+        </div>
+        <div class="flex space-x-4">
+          <button
+            id="all-stories-btn"
+            class="px-6 py-2 bg-amber-700 text-white rounded-xl hover:bg-amber-800 transition-all duration-300 flex items-center"
+          >
+            <i class="fas fa-book mr-2"></i>
+            <span>Tất cả truyện</span>
+          </button>
+          <button
+            id="favorites-btn"
+            class="px-6 py-2 border border-amber-700 text-amber-700 rounded-xl hover:bg-amber-100 transition-all duration-300 flex items-center"
+          >
+            <i class="fas fa-heart mr-2"></i>
+            <span>Yêu thích</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Category Filter -->
+      <div class="mb-8">
+        <div class="category-dropdown">
+          <button
+            class="px-6 py-2 bg-amber-100 text-amber-900 rounded-full border border-amber-300 flex items-center"
+          >
+            <span>Tất cả thể loại</span>
+            <i class="fas fa-chevron-down ml-2"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="#" class="active">Tất cả thể loại</a>
+            <a href="#">Văn học thiếu nhi</a>
+            <a href="#">Ký sự</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <main>
+        <!-- Stories Section -->
+        <section id="all-stories" class="fade-in">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center"
+          >
+            <!-- Story Card 1 -->
+            <div
+              class="story-card bg-white rounded-xl shadow-lg overflow-hidden relative w-full max-w-sm"
+            >
+              <div class="relative">
+                <img
+                  src="https://i.imgur.com/nsjKQ2G.jpeg"
+                  alt="Chuyện con suối Mường Tiên"
+                  class="w-full h-64 object-cover"
+                />
+                <div class="story-tag tag-children">Văn học thiếu nhi</div>
+                <div
+                  class="play-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 transition-opacity"
+                >
+                  <button class="play-btn" data-story="1">
+                    <div
+                      class="bg-white bg-opacity-30 rounded-full p-4 hover:bg-opacity-50 transition"
+                    >
+                      <i class="fas fa-play text-white text-3xl"></i>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-3 text-amber-900 text-center">
+                  Chuyện con suối Mường Tiên
+                </h3>
+                <p class="text-amber-800 mb-4 text-sm text-center">
+                  Câu chuyện về Chà, cậu bé lớn lên bên suối Mường Tiên. Khi
+                  suối bị chặn lại để xây thủy điện, Chà quyết tâm học giỏi để
+                  cứu suối, phản ánh sự gắn bó giữa con người và thiên nhiên.
+                </p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center text-sm text-amber-700">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span>1:18 phút</span>
+                  </div>
+                  <button class="favorite-btn" data-story="1">
+                    <i
+                      class="far fa-heart text-xl text-amber-600 hover:text-red-500 transition"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Story Card 2 -->
+            <div
+              class="story-card bg-white rounded-xl shadow-lg overflow-hidden relative w-full max-w-sm"
+            >
+              <div class="relative">
+                <img
+                  src="videos/card2.jpg"
+                  alt="Chiếc bánh trong đẩy túi"
+                  class="w-full h-64 object-cover"
+                />
+                <div class="story-tag tag-children">Văn học thiếu nhi</div>
+                <div
+                  class="play-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 transition-opacity"
+                >
+                  <button class="play-btn" data-story="2">
+                    <div
+                      class="bg-white bg-opacity-30 rounded-full p-4 hover:bg-opacity-50 transition"
+                    >
+                      <i class="fas fa-play text-white text-3xl"></i>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-3 text-amber-900 text-center">
+                  Chiếc bánh trong đẩy túi
+                </h3>
+                <p class="text-amber-800 mb-4 text-sm text-center">
+                  Câu chuyện về Thạch Sơn, cậu bé sống trong vùng núi. Sau khi
+                  mẹ mất, cậu luôn nhớ mẹ qua những chiếc bánh pa nếp. Mỗi dịp
+                  Tết, cậu làm bánh cùng mẹ và các bác tiên tổ, giữ lại những ký
+                  ức về mẹ suốt đời.
+                </p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center text-sm text-amber-700">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span>20 phút</span>
+                  </div>
+                  <button class="favorite-btn" data-story="2">
+                    <i
+                      class="far fa-heart text-xl text-amber-600 hover:text-red-500 transition"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Story Card 3 -->
+            <div
+              class="story-card bg-white rounded-xl shadow-lg overflow-hidden relative w-full max-w-sm"
+            >
+              <div class="relative">
+                <img
+                  src="videos/card3.jpg"
+                  alt="Vũng đầm của thần rồng"
+                  class="w-full h-64 object-cover"
+                />
+                <div class="story-tag tag-journal">Ký sự</div>
+                <div
+                  class="play-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 transition-opacity"
+                >
+                  <button class="play-btn" data-story="3">
+                    <div
+                      class="bg-white bg-opacity-30 rounded-full p-4 hover:bg-opacity-50 transition"
+                    >
+                      <i class="fas fa-play text-white text-3xl"></i>
+                    </div>
+                  </button>
+                </div>
+              </div>
+              <div class="p-6">
+                <h3 class="text-xl font-bold mb-3 text-amber-900 text-center">
+                  Vũng đầm của thần rồng
+                </h3>
+                <p class="text-amber-800 mb-4 text-sm text-center">
+                  Chàng Rồng biến thành ngựa rồng, giúp dân có nước. Cô gái mở
+                  cối yêu anh và họ có mối quan hệ. Khi ông Trời phát hiện,
+                  chàng Rồng bỏ chạy, làm cạn hồ nước. Cô gái sống cô đơn và chờ
+                  đợi anh suốt đời.
+                </p>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center text-sm text-amber-700">
+                    <i class="fas fa-clock mr-2"></i>
+                    <span>12 phút</span>
+                  </div>
+                  <button class="favorite-btn" data-story="3">
+                    <i
+                      class="far fa-heart text-xl text-amber-600 hover:text-red-500 transition"
+                    ></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Video Player Modal -->
+        <div
+          id="video-modal"
+          class="fixed inset-0 bg-black bg-opacity-75 hidden items-center justify-center z-50"
+        >
+          <div class="relative w-full max-w-5xl p-4">
+            <button
+              id="close-modal"
+              class="absolute top-0 right-0 -mt-10 -mr-10 text-white hover:text-amber-500 z-10"
+            >
+              <i class="fas fa-times text-2xl"></i>
+            </button>
+            <div class="video-container bg-black rounded-lg overflow-hidden">
+              <video id="video-player" class="video-player" controls>
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="videos.js"></script>
+  </body>
+</html>

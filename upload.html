@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Upload Videos - Kho truyện Mã A Lềnh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Noto Serif", serif;
+        background-color: #fff9f0;
+      }
+    </style>
+  </head>
+  <body class="bg-amber-50">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+      <div class="flex items-center mb-8">
+        <div class="bg-amber-700 text-white p-3 rounded-lg mr-4">
+          <i class="fas fa-upload text-2xl"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-amber-900">Upload Videos</h1>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-xl font-bold mb-4 text-amber-800">
+          Upload Story Videos
+        </h2>
+
+        <div class="space-y-6">
+          <!-- Video 1 -->
+          <div class="border border-amber-200 rounded-lg p-4">
+            <h3 class="font-bold text-amber-900 mb-2">
+              Chuyện con suối Mường Tiên
+            </h3>
+            <div class="mb-4">
+              <div class="relative">
+                <input
+                  type="file"
+                  id="video1"
+                  name="video1"
+                  accept="video/*"
+                  class="hidden"
+                  onchange="updateFileName(this, 'video1-name')"
+                />
+                <label
+                  for="video1"
+                  class="flex items-center justify-center px-4 py-2 bg-amber-100 text-amber-800 rounded-lg cursor-pointer hover:bg-amber-200 transition w-full"
+                >
+                  <i class="fas fa-file-video mr-2"></i>
+                  <span>Choose Video File</span>
+                </label>
+                <div id="video1-name" class="mt-2 text-sm text-gray-600">
+                  No file chosen
+                </div>
+              </div>
+            </div>
+            <button
+              class="upload-btn w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition"
+              data-video="1"
+              data-filename="chuyen-con-suoi-muong-tien.mp4"
+            >
+              Upload Video
+            </button>
+          </div>
+
+          <!-- Video 2 -->
+          <div class="border border-amber-200 rounded-lg p-4">
+            <h3 class="font-bold text-amber-900 mb-2">
+              Chiếc bánh trong đẩy túi
+            </h3>
+            <div class="mb-4">
+              <div class="relative">
+                <input
+                  type="file"
+                  id="video2"
+                  name="video2"
+                  accept="video/*"
+                  class="hidden"
+                  onchange="updateFileName(this, 'video2-name')"
+                />
+                <label
+                  for="video2"
+                  class="flex items-center justify-center px-4 py-2 bg-amber-100 text-amber-800 rounded-lg cursor-pointer hover:bg-amber-200 transition w-full"
+                >
+                  <i class="fas fa-file-video mr-2"></i>
+                  <span>Choose Video File</span>
+                </label>
+                <div id="video2-name" class="mt-2 text-sm text-gray-600">
+                  No file chosen
+                </div>
+              </div>
+            </div>
+            <button
+              class="upload-btn w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition"
+              data-video="2"
+              data-filename="chiec-banh-trong-day-tui.mp4"
+            >
+              Upload Video
+            </button>
+          </div>
+
+          <!-- Video 3 -->
+          <div class="border border-amber-200 rounded-lg p-4">
+            <h3 class="font-bold text-amber-900 mb-2">
+              Vũng đầm của thần rồng
+            </h3>
+            <div class="mb-4">
+              <div class="relative">
+                <input
+                  type="file"
+                  id="video3"
+                  name="video3"
+                  accept="video/*"
+                  class="hidden"
+                  onchange="updateFileName(this, 'video3-name')"
+                />
+                <label
+                  for="video3"
+                  class="flex items-center justify-center px-4 py-2 bg-amber-100 text-amber-800 rounded-lg cursor-pointer hover:bg-amber-200 transition w-full"
+                >
+                  <i class="fas fa-file-video mr-2"></i>
+                  <span>Choose Video File</span>
+                </label>
+                <div id="video3-name" class="mt-2 text-sm text-gray-600">
+                  No file chosen
+                </div>
+              </div>
+            </div>
+            <button
+              class="upload-btn w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded-lg transition"
+              data-video="3"
+              data-filename="vung-dam-cua-than-rong.mp4"
+            >
+              Upload Video
+            </button>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-between">
+          <a
+            href="index.html"
+            class="flex items-center text-amber-700 hover:text-amber-900 transition"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span>Back to Stories</span>
+          </a>
+          <div id="upload-status" class="text-green-600 font-bold"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function updateFileName(input, targetId) {
+        const target = document.getElementById(targetId);
+        if (input.files.length > 0) {
+          target.textContent = input.files[0].name;
+        } else {
+          target.textContent = "No file chosen";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const uploadButtons = document.querySelectorAll(".upload-btn");
+
+        uploadButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            const videoId = this.getAttribute("data-video");
+            const targetFilename = this.getAttribute("data-filename");
+            const fileInput = document.getElementById("video" + videoId);
+            const statusElement = document.getElementById("upload-status");
+
+            if (!fileInput.files.length) {
+              statusElement.textContent = "Please select a file first.";
+              statusElement.className = "text-red-600 font-bold";
+              return;
+            }
+
+            const file = fileInput.files[0];
+
+            // In a real implementation, here you would upload the file to your server
+            // using fetch or FormData API. This is just a simulation:
+
+            button.textContent = "Uploading...";
+            button.disabled = true;
+
+            // Simulate upload delay
+            setTimeout(() => {
+              button.textContent = "Uploaded!";
+              button.classList.remove("bg-amber-600", "hover:bg-amber-700");
+              button.classList.add("bg-green-600", "hover:bg-green-700");
+
+              statusElement.textContent =
+                'Video "' + targetFilename + '" has been selected.';
+              statusElement.className = "text-green-600 font-bold";
+
+              // After simulated upload, restore button
+              setTimeout(() => {
+                button.textContent = "Upload Video";
+                button.disabled = false;
+                button.classList.remove("bg-green-600", "hover:bg-green-700");
+                button.classList.add("bg-amber-600", "hover:bg-amber-700");
+              }, 3000);
+            }, 1500);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

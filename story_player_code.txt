@@ -1,0 +1,237 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kho truyện Mã A Lềnh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Serif', serif;
+            background-color: #FFF9F0;
+        }
+        .story-card {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .story-card:hover .play-overlay {
+            opacity: 1;
+        }
+        .play-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .progress-bar {
+            height: 6px;
+            background-color: #EDE9E3;
+            border-radius: 3px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D4A373 0%, #A18072 100%);
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+        .story-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .tag-children {
+            background-color: rgba(74, 222, 128, 0.9);
+        }
+        .tag-journal {
+            background-color: rgba(59, 130, 246, 0.9);
+        }
+        .audio-wave {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60px;
+            height: 30px;
+        }
+        .wave-bar {
+            width: 4px;
+            background-color: #D4A373;
+            border-radius: 2px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        .wave-bar:nth-child(1) { height: 8px; animation-delay: 0.1s; }
+        .wave-bar:nth-child(2) { height: 12px; animation-delay: 0.3s; }
+        .wave-bar:nth-child(3) { height: 16px; animation-delay: 0.5s; }
+        .wave-bar:nth-child(4) { height: 12px; animation-delay: 0.7s; }
+        .wave-bar:nth-child(5) { height: 8px; animation-delay: 0.9s; }
+        @keyframes wave {
+            0%, 100% { transform: scaleY(0.8); }
+            50% { transform: scaleY(1.5); }
+        }
+        .bookmark-icon {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            color: #D4A373;
+            font-size: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .center-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        }
+        .video-player {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .video-container:hover .video-controls {
+            opacity: 1;
+        }
+        .fullscreen-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+            padding: 5px 8px;
+            cursor: pointer;
+        }
+        .story-content {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .story-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        .story-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .story-content::-webkit-scrollbar-thumb {
+            background: #D4A373;
+            border-radius: 10px;
+        }
+        .story-content p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="bg-amber-50">
+    <div class="container mx-auto px-4 py-8 max-w-7xl center-container">
+        <!-- Header -->
+        <header class="flex flex-col md:flex-row justify-between items-center mb-12 w-full">
+            <div class="flex items-center mb-4 md:mb-0">
+                <div class="bg-amber-700 text-white p-3 rounded-lg mr-4">
+                    <i class="fas fa-book-open text-2xl"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-amber-900">Kho truyện Mã A Lềnh</h1>
+            </div>
+            <div class="flex space-x-2 bg-amber-100 p-2 rounded-full shadow-inner">
+                <button id="all-stories-btn" class="px-6 py-2 bg-amber-700 text-white rounded-full hover:bg-amber-800 transition-all duration-300 flex items-center">
+                    <i class="fas fa-book mr-2"></i>
+                    <span>Tất cả truyện</span>
+                </button>
+                <button id="favorites-btn" class="px-6 py-2 rounded-full hover:bg-amber-200 transition-all duration-300 flex items-center">
+                    <i class="fas fa-heart mr-2 text-amber-700"></i>
+                    <span>Yêu thích</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="w-full">
+            <!-- All Stories Section -->
+            <section id="all-stories" class="fade-in w-full">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-8 w-full">
+                    <div class="relative">
+                        <select id="story-filter" class="appearance-none bg-amber-100 border border-amber-300 text-amber-900 py-2 px-4 pr-8 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="all">Tất cả thể loại</option>
+                            <option value="children">Văn học thiếu nhi</option>
+                            <option value="journal">Ký sự</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-amber-700">
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                    <!-- Story Card 1 -->
+                    <div class="story-card bg-white rounded-xl shadow-lg overflow-hidden relative w-full max-w-sm">
+                        <div class="relative">
+                            <img src="https://i.imgur.com/nsjKQ2G.jpeg" alt="Chuyện con suối Mường Tiên" class="w-full h-64 object-cover">
+                            <div class="story-tag tag-children">Văn học thiếu nhi</div>
+                            <div class="play-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 transition-opacity">
+                                <button class="play-btn" data-story="1">
+                                    <div class="bg-white bg-opacity-30 rounded-full p-4 hover:bg-opacity-50 transition">
+                                        <i class="fas fa-play text-white text-3xl"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-3 text-amber-900 text-center">Chuyện con suối Mường Tiên</h3>
+                            <p class="text-amber-800 mb-4 text-sm text-center">Câu chuyện về Chà, cậu bé lớn lên bên suối Mường Tiên. Khi suối bị chặn lại để xây thủy điện, Chà quyết tâm học giỏi để cứu suối, phản ánh sự gắn bó giữa con người và thiên nhiên.</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-sm text-amber-700">
+                                    <i class="fas fa-clock mr-2"></i>
+                                    <span>1:18 phút</span>
+                                </div>
+                                <button class="favorite-btn" data-story="1">
+                                    <i class="far fa-heart text-xl text-amber-600 hover:text-red-500 transition"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add other story cards -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // JavaScript code for handling play/pause functionality and audio/video logic here
+    </script>
+</body>
+</html>
